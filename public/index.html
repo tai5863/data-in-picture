@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data in Picture</title>
+    <script type="text/javascript">
+    let count = 0;
+    let intervalID = 0;
+
+    function draw() {
+        ++count;
+        const image = document.getElementById('image');
+        const video = document.getElementById('video');
+        const width = video.clientWidth;
+        const height = video.clientHeight;
+        const range = Math.max(width * 4 / 1920, 1.0);
+
+        function controlData(src) {
+            let data = src.data;
+            let ave = 0;
+            let dst = data;
+            for (let i = 0; i < data.length; i = i + 4) {
+                dst[i] = data[i] / 255; 
+                dst[i + 1] = data[i + 1] / 255; 
+                dst[i + 2] = data[i + 2] / 255; 
+                ave += dst[i] + dst[i + 1] + dst[i + 2];
+            }
+            ave /= data.length * 0.75;
+            console.log(ave);
+        }
+
+        function drawImage() {
+            let canvas = document.getElementById('canvas');
+            let c2d = canvas.getContext('2d');
+            canvas.width = range;
+            canvas.height = height;
+            c2d.drawImage(video, 0, 0, width, height);
+            let src =  c2d.getImageData(0, 0, range, height);
+            controlData(src);
+        } 
+
+        let eButton = document.getElementById('button');
+        if (count % 2 == 1) {
+            intervalID = setInterval(drawImage, 1000 / 30);
+            console.log('draw');
+            eButton.innerHTML = 'stop'; 
+        } else {
+            window.clearInterval(intervalID);
+            console.log('stop');
+            eButton.innerHTML = 'draw'; 
+        }
+        // drawImage();
+    }
+    </script>
+</head>
+<body>
+    <h1>Video</h1>
+    <video id="video" style="width: 80%; height: auto;" controls>
+        <source src="../movie/out.mp4">
+    </video>
+    <canvas id="canvas"></canvas> 
+    <button onclick="draw()" id="button">draw</button>
+</body>
+</html>
+
+<style>
+body {
+    margin: 0;
+    color: #F0F0F0;
+    background-color: #222222;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#canvas {
+    display: none;
+}
+#button {
+    margin: 30px 0;
+}
+</style>
