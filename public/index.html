@@ -10,11 +10,12 @@
 
     function draw() {
         ++count;
-        const image = document.getElementById('image');
         const video = document.getElementById('video');
-        const width = video.clientWidth;
-        const height = video.clientHeight;
-        const range = Math.max(width * 4 / 1920, 1.0);
+        const width = video.width;
+        const height = video.height;
+        
+        const range = Math.round(Math.max(width * 4 / 1920, 1.0));
+        console.log('range: ' + range + 'px');
 
         function controlData(src) {
             let data = src.data;
@@ -27,7 +28,8 @@
                 ave += dst[i] + dst[i + 1] + dst[i + 2];
             }
             ave /= data.length * 0.75;
-            console.log(ave);
+            ave = Math.round(ave);
+            console.log('average: ' + ave);
         }
 
         function drawImage() {
@@ -42,7 +44,7 @@
 
         let eButton = document.getElementById('button');
         if (count % 2 == 1) {
-            intervalID = setInterval(drawImage, 1000 / 30);
+            intervalID = setInterval(drawImage, 1000 / 60);
             console.log('draw');
             eButton.innerHTML = 'stop'; 
         } else {
@@ -56,9 +58,12 @@
 </head>
 <body>
     <h1>Video</h1>
-    <video id="video" style="width: 80%; height: auto;" controls>
-        <source src="../movie/out.mp4">
-    </video>
+    <div id="container">
+        <div id="wrapper"></div>
+        <video id="video" width="1920px" height="1080px" loop="true" controls>
+            <source src="../movies/render.mp4">
+        </video>
+    </div>
     <canvas id="canvas"></canvas> 
     <button onclick="draw()" id="button">draw</button>
 </body>
@@ -70,15 +75,22 @@ body {
     color: #F0F0F0;
     background-color: #222222;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+}
+#video {
+    width: 80%;
+    height: auto;
 }
 #canvas {
     display: none;
 }
 #button {
     margin: 30px 0;
+}
+#container {
+    display: inline-block;
+    min-width: 100%;
+}
+#wrapper {
+    height: 100%;
 }
 </style>
