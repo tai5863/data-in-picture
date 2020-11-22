@@ -74,11 +74,11 @@ button.addEventListener('click', function() {
             3, 2, 1
         ];
         
-        let vPosition     = createVBO(position);
-        let vColor        = createVBO(color);
+        let vPosition = createVBO(position);
+        let vColor = createVBO(color);
         let vTextureCoord = createVBO(texCoord);
-        let VBOList       = [vPosition, vColor, vTextureCoord];
-        let iIndex        = createIBO(index);
+        let VBOList = [vPosition, vColor, vTextureCoord];
+        let iIndex = createIBO(index);
         
         setAttribute(VBOList, attLocation, attStride);
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iIndex);
@@ -95,6 +95,23 @@ button.addEventListener('click', function() {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+        let dataSize = vibWidth * height * 4;
+        let data = new Uint8Array(dataSize);
+
+        function control(data) {
+            let ave = 0;
+            let dst = data;
+            for (let i = 0; i < dataSize; i = i + 4) {
+                dst[i] = data[i] / 255; 
+                dst[i + 1] = data[i + 1] / 255; 
+                dst[i + 2] = data[i + 2] / 255; 
+                ave += dst[i] + dst[i + 1] + dst[i + 2];
+            }
+            ave /= data.length * 0.75;
+            ave = Math.round(ave);
+            return ave;
+        }
 
         let time = 0;
 
@@ -113,6 +130,14 @@ button.addEventListener('click', function() {
             gl.drawElements(gl.TRIANGLES, index.length, gl.UNSIGNED_SHORT, 0);
 
             gl.flush();
+
+            gl.readPixels(0, 0, vibWidth, height, gl.RGBA, gl.UNSIGNED_BYTE, data);
+
+            let average = control(data);
+            if (average == 1) {
+                let isVibrated = window.navigator.vibrate(10);
+                console.log('vibrated');
+            }
 
             setTimeout(loop, 1000 / 60);
         }
