@@ -3,9 +3,14 @@ let count = 0;
 const duration = 10;
 const vibWidth = 10;
 
+let loopID = 0;
+
 const video = document.getElementById('video');
 const width = video.width;
 const height = video.height;
+
+const canvasWidth = width;
+const canvasHeight = 10;
 
 let canvas;
 
@@ -18,8 +23,8 @@ button.addEventListener('click', function() {
         button.innerHTML = 'stop'; 
 
         canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
         canvas.style.display = 'block';
         document.body.appendChild(canvas);
 
@@ -29,10 +34,11 @@ button.addEventListener('click', function() {
         document.body.removeChild(canvas);
         button.innerHTML = 'draw'; 
         canvas.style.display = 'block';
+        window.cancelAnimationFrame(loopID);
     }
 
     function render() {
-        let gl = canvas.getContext('webgl');
+        const gl = canvas.getContext('webgl');
 
         let vs = createShader('vs');
         let fs = createShader('fs');
@@ -96,7 +102,7 @@ button.addEventListener('click', function() {
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
         gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 
-        let dataSize = vibWidth * height * 4;
+        let dataSize = vibWidth * canvasHeight * 4;
         let data = new Uint8Array(dataSize);
 
         function control(data) {
@@ -131,7 +137,7 @@ button.addEventListener('click', function() {
 
             gl.flush();
 
-            gl.readPixels(0, 0, vibWidth, height, gl.RGBA, gl.UNSIGNED_BYTE, data);
+            gl.readPixels(0, 0, vibWidth, canvasHeight, gl.RGBA, gl.UNSIGNED_BYTE, data);
 
             let average = control(data);
             if (average == 1) {
@@ -139,7 +145,7 @@ button.addEventListener('click', function() {
                 console.log('vibrated');
             }
 
-            setTimeout(loop, 1000 / 60);
+            loopID = requestAnimationFrame(loop);
         }
 
         function createShader(id) {
