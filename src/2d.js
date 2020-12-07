@@ -1,5 +1,6 @@
 
-let count = 0;
+// settings 
+let button_count = 0;
 const duration = 10;
 const vibWidth = 10;
 
@@ -10,23 +11,24 @@ const width = video.width;
 const height = video.height;
 
 const canvasWidth = width;
-const canvasHeight = 10;
+const canvasHeight = 1;
 
 let canvas;
+let render_count;
+
+let container = [0, 0, 0]; // vibration information
 
 const button = document.getElementById('button');
 
-
 button.addEventListener('click', function() {
-    ++count;
+    ++button_count;
 
-    if (count % 2 == 1) {
+    if (button_count % 2 == 1) {
         button.innerHTML = 'stop'; 
 
         canvas = document.createElement('canvas');
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
-        canvas.style.display = 'block';
         document.body.appendChild(canvas);
 
         video.play();
@@ -59,13 +61,19 @@ button.addEventListener('click', function() {
         loop();
 
         function loop() {
+            ++render_count;
             c2d.drawImage(video, 0, 0, canvasWidth, canvasHeight);
+
             let src =  c2d.getImageData(0, 0, vibWidth, canvasHeight);
-            let average = control(src);
-            if (average == 1) {
+            let value = control(src);
+            container.shift(); // remove the first element
+            container.push(value); // add a new element
+            if (container[0] == 0 && container[1] == 0 && container[2] == 1) {
+                // vibrate
                 let isVibrated = window.navigator.vibrate(duration);
                 console.log('vibrated');
             }
+
             loopID = requestAnimationFrame(loop);
         } 
     }
