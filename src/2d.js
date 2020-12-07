@@ -2,7 +2,8 @@
 // settings 
 let button_count = 0;
 const duration = 50;
-const vibWidth = 1;
+const cropWidth = 50;
+const resolution = { w: 1970, h: 1080 };
 
 let loopID = 0;
 
@@ -19,6 +20,12 @@ let render_count;
 let container = [0, 0, 0, 0, 0]; // vibration information
 
 const button = document.getElementById('button');
+const crop = document.getElementById('crop');
+const wrapper = document.getElementById('wrapper');
+
+const wrapperWidth = window.innerWidth * 0.8;
+crop.style.width = wrapperWidth * cropWidth / resolution.w + 'px';
+crop.style.height = Math.round(wrapperWidth * resolution.h / resolution.w) + 'px';
 
 button.addEventListener('click', function() {
     ++button_count;
@@ -61,13 +68,13 @@ button.addEventListener('click', function() {
         loop();
 
         function loop() {
-            ++render_count;
             c2d.drawImage(video, 0, 0, canvasWidth, canvasHeight);
 
-            let src =  c2d.getImageData(0, 0, vibWidth, canvasHeight);
+            let src =  c2d.getImageData(0, 0, 1, canvasHeight);
             let value = control(src);
             container.shift(); // remove the first element
             container.push(value); // add a new element
+
             if (container[0] == 0 && container[1] == 0 && container[2] == 0 && container[3] == 0 && container[4] == 1) {
             // if (value) {
                 // vibrate
