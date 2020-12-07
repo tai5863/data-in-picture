@@ -1,8 +1,8 @@
 
 // settings 
 let button_count = 0;
-const duration = 10;
-const vibWidth = 10;
+const duration = 50;
+const vibWidth = 1;
 
 let loopID = 0;
 
@@ -10,13 +10,13 @@ const video = document.getElementById('video');
 const width = video.width;
 const height = video.height;
 
-const canvasWidth = width;
+const canvasWidth = 100;
 const canvasHeight = 1;
 
 let canvas;
 let render_count;
 
-let container = [0, 0, 0]; // vibration information
+let container = [0, 0, 0, 0, 0]; // vibration information
 
 const button = document.getElementById('button');
 
@@ -68,7 +68,8 @@ button.addEventListener('click', function() {
             let value = control(src);
             container.shift(); // remove the first element
             container.push(value); // add a new element
-            if (container[0] == 0 && container[1] == 0 && container[2] == 1) {
+            if (container[0] == 0 && container[1] == 0 && container[2] == 0 && container[3] == 0 && container[4] == 1) {
+            // if (value) {
                 // vibrate
                 let isVibrated = window.navigator.vibrate(duration);
                 console.log('vibrated');
