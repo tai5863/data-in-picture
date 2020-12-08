@@ -7,10 +7,6 @@ const resolution = { w: 1970, h: 1080 };
 
 let loopID = 0;
 
-const video = document.getElementById('video');
-const width = video.width;
-const height = video.height;
-
 const canvasWidth = 100;
 const canvasHeight = 1;
 
@@ -19,13 +15,21 @@ let render_count;
 
 let container = [0, 0, 0, 0, 0]; // vibration information
 
+const video = document.getElementById('video');
 const button = document.getElementById('button');
 const crop = document.getElementById('crop');
 const wrapper = document.getElementById('wrapper');
 
-const wrapperWidth = window.innerWidth * 0.8;
-crop.style.width = wrapperWidth * cropWidth / resolution.w + 'px';
-crop.style.height = Math.round(wrapperWidth * resolution.h / resolution.w) + 'px';
+// style settings
+const resize = () => {
+    const wrapperWidth = window.innerWidth * 0.8;
+    const newCropWidth = wrapperWidth * cropWidth / resolution.w;
+    crop.style.width = Math.round(newCropWidth) + 1 + 'px';
+    crop.style.height = Math.round(wrapperWidth * resolution.h / resolution.w) + 'px';
+    wrapper.style.left = Math.round((window.innerWidth - wrapperWidth) * 0.5 - newCropWidth * 0.5) + 'px';
+}
+window.addEventListener('resize', resize);
+resize();
 
 button.addEventListener('click', function() {
     ++button_count;
