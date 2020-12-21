@@ -7,7 +7,7 @@ const resolution = { w: 1970, h: 1080 };
 
 let loopID = 0;
 
-const canvasWidth = 100;
+const canvasWidth = 50;
 const canvasHeight = 1;
 
 let canvas;
@@ -80,7 +80,6 @@ button.addEventListener('click', function() {
             container.push(value); // add a new element
 
             if (container[0] == 0 && container[1] == 0 && container[2] == 0 && container[3] == 0 && container[4] == 1) {
-            // if (value) {
                 // vibrate
                 let isVibrated = window.navigator.vibrate(duration);
                 console.log('vibrated');
