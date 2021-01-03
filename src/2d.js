@@ -1,5 +1,6 @@
 
 const video = document.getElementById('video');
+video.width = window.innerWidth * 0.8;
 const button = document.getElementById('button');
 let button_count = 0; // ボタンが何回押されたか
 const duration = [50, 125, 150, 175, 200]; // vibrationさせる時間 (5frame分)
@@ -17,16 +18,15 @@ let canvas; // canvas用の変数
 let container = [0, 0, 0, 0, 0]; // 5frame分のvibrationの情報
 
 const crop = document.getElementById('crop');
-const wrapper = document.getElementById('wrapper');
 const cropWidth = 50; // クロップする範囲 (元動画の解像度)
 
 // リサイズ処理
 const resize = () => {
-    const wrapperWidth = window.innerWidth * 0.8;
-    const newCropWidth = wrapperWidth * cropWidth / resolution.w;
-    crop.style.width = Math.round(newCropWidth) + 1 + 'px';
-    crop.style.height = Math.round(wrapperWidth * resolution.h / resolution.w) + 1 + 'px';
-    wrapper.style.left = Math.round((window.innerWidth - wrapperWidth) * 0.5 - newCropWidth * 0.5) + 'px';
+    const videoWidth = video.getBoundingClientRect().width;
+    const newCropWidth = videoWidth * cropWidth / resolution.w;
+    const margin = (window.innerWidth - videoWidth) * 0.5 - newCropWidth;
+    crop.style.width = Math.round(newCropWidth + margin) + 1 + 'px';
+    crop.style.height = Math.round(videoWidth * resolution.h / resolution.w) + 1 + 'px';
 }
 window.addEventListener('resize', resize);
 resize();

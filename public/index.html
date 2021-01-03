@@ -8,12 +8,10 @@
 <body>
     <h1>Data in Picture</h1>
     <h2>Movie</h2>
-    <div id="wrapper">
-        <div id="crop"></div>
-        <video id="video" loop="true" width="1" height="1">
-            <source src="../movies/out_50px_5frame.mp4">
-        </video>
-    </div>
+    <div id="crop"></div>
+    <video id="video" loop="true" width="1" height="1">
+        <source src="../movies/out_50px_5frame.mp4">
+    </video>
     <button id="button">draw</button>
 
     <h2>Rendered</h2>
@@ -28,16 +26,14 @@ body {
     color: #F0F0F0;
     background-color: #000000;
 }
-#wrapper {
-    position: relative;
-    width: 80%;
-}
 #crop {
     position: absolute;
+    left: 0.54%;
     background-color: #000000;
 }
 #video {
-    width: 100%;
+    margin-left: 8.54%;
+    width: 80%;
     height: auto;
 }
 #button {
