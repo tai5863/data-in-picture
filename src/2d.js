@@ -1,8 +1,9 @@
 
+const video = document.getElementById('video');
+const button = document.getElementById('button');
 let button_count = 0; // ボタンが何回押されたか
 const duration = [50, 125, 150, 175, 200]; // vibrationさせる時間 (5frame分)
 const tone = [50, 101, 153, 204, 255]; // 諧調
-const cropWidth = 50; // クロップする範囲 (元動画の解像度)
 const resolution = { w: 1970, h: 1080 }; // 元動画の解像度
 
 let loopID = 0; // requestAnimationFrameで返されるID (テスト用)
@@ -15,10 +16,9 @@ let canvas; // canvas用の変数
 
 let container = [0, 0, 0, 0, 0]; // 5frame分のvibrationの情報
 
-const video = document.getElementById('video');
-const button = document.getElementById('button');
 const crop = document.getElementById('crop');
 const wrapper = document.getElementById('wrapper');
+const cropWidth = 50; // クロップする範囲 (元動画の解像度)
 
 // リサイズ処理
 const resize = () => {
