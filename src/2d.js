@@ -25,7 +25,7 @@ const resize = () => {
     const wrapperWidth = window.innerWidth * 0.8;
     const newCropWidth = wrapperWidth * cropWidth / resolution.w;
     crop.style.width = Math.round(newCropWidth) + 1 + 'px';
-    crop.style.height = Math.round(wrapperWidth * resolution.h / resolution.w + 1) + 'px';
+    crop.style.height = Math.round(wrapperWidth * resolution.h / resolution.w) + 1 + 'px';
     wrapper.style.left = Math.round((window.innerWidth - wrapperWidth) * 0.5 - newCropWidth * 0.5) + 'px';
 }
 window.addEventListener('resize', resize);
@@ -88,8 +88,9 @@ button.addEventListener('click', function() {
                     if (tone[i] === container[4]) {
                         // vibrate
                         let isVibrated = window.navigator.vibrate(duration[i]);
-                        console.log('vibrated');
-                        console.log('duration: ' + duration[i]);
+                        if (isVibrated) {
+                            console.log('vibrated (duration: ' + duration[i] + ')');
+                        }
                     }
                 }
             }
